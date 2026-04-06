@@ -1,0 +1,10 @@
+artifact_location: file:///D:/web%20Development%20using%20python/PROJECTS/kidney_disease_classification/mlruns/635460227800984244/models/m-46fbcb4a75ae482aa976bc142a0ad49d/artifacts
+creation_timestamp: 1775469336156
+experiment_id: '635460227800984244'
+last_updated_timestamp: 1775469353303
+model_id: m-46fbcb4a75ae482aa976bc142a0ad49d
+model_type: null
+name: model
+source_run_id: 09d6993b41a14473a9542c10d52545dd
+status: 2
+status_message: null

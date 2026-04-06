@@ -1,0 +1,14 @@
+artifact_uri: file:///D:/web%20Development%20using%20python/PROJECTS/kidney_disease_classification/mlruns/635460227800984244/09d6993b41a14473a9542c10d52545dd/artifacts
+end_time: 1775469353330
+entry_point_name: ''
+experiment_id: '635460227800984244'
+lifecycle_stage: active
+run_id: 09d6993b41a14473a9542c10d52545dd
+run_name: Evaluation
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1775469335944
+status: 3
+tags: []
+user_id: HP
