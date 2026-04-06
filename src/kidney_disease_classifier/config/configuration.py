@@ -2,7 +2,7 @@ from kidney_disease_classifier.constants import *
 import os
 from kidney_disease_classifier import logger
 from kidney_disease_classifier.utils.common import read_yaml, create_directories
-from kidney_disease_classifier.entity.config_entity import (DataIngestionConfig,PrepareBaseModelConfig
+from kidney_disease_classifier.entity.config_entity import (DataIngestionConfig,PrepareBaseModelConfig , TrainingConfig
                                            )
 
 
@@ -30,6 +30,8 @@ class ConfigurationManager:
             local_data_file=config.local_data_file,
             unzip_dir=config.unzip_dir
         )
+        logger.info(f"DataIngestionConfig: {data_ingestion_config}")
+
 
         return data_ingestion_config
 
@@ -50,4 +52,27 @@ class ConfigurationManager:
         logger.info(f"PrepareBaseModelConfig: {prepare_base_model_config}")
 
         return prepare_base_model_config
+
+
+
+    def get_training_config(self) -> TrainingConfig:
+        training_config = self.config.training
+
+        training_data = os.path.join(self.config.data_ingestion.unzip_dir, "kidney-ct-scan-image")
+
+        create_directories([training_config.root_dir])
+
+        training_config = TrainingConfig(
+            root_dir=Path(training_config.root_dir),
+            trained_model_path=Path(training_config.trained_model_path),
+            updated_base_model_path=Path(self.config.prepare_base_model.updated_base_model_path),
+            training_data=Path(training_data),
+            params_epochs=self.params.EPOCHS,
+            params_batch_size=self.params.BATCH_SIZE,
+            params_is_augmentation=self.params.AUGMENTATION,
+            params_image_size=self.params.IMAGE_SIZE
+        )
+        logger.info(f"TrainingConfig: {training_config}")
+
+        return training_config
 
