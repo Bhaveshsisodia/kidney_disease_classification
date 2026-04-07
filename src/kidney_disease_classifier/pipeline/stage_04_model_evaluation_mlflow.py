@@ -15,7 +15,7 @@ class ModelEvaluationPipeline:
             logger.info(f"Evaluation config: {evaluation_config}")
             evaluation = Evaluation(config=evaluation_config)
             evaluation.evaluate()
-            evaluation.log_into_mlflow()
+            # evaluation.log_into_mlflow()
         except Exception as e:
             logger.exception(e)
             raise e
