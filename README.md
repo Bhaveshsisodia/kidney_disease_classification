@@ -60,7 +60,16 @@ This project implements an end-to-end machine learning pipeline for classifying 
    pip install -e .
    ```
 
-5. **Set up MLflow tracking credentials** (for DagsHub integration):
+5. **Set up DVC (Data Version Control)**:
+   ```bash
+   # Initialize DVC if not already done
+   dvc init
+
+   # Pull data from remote storage (if configured)
+   dvc pull
+   ```
+
+6. **Set up MLflow tracking credentials** (for DagsHub integration):
    ```bash
    export MLFLOW_TRACKING_USERNAME=your_dagshub_username
    export MLFLOW_TRACKING_PASSWORD=your_dagshub_access_token
@@ -81,6 +90,27 @@ This will run all stages sequentially:
 2. Base Model Preparation
 3. Model Training
 4. Model Evaluation with MLflow logging
+
+### Running the Pipeline with DVC
+
+The project uses DVC to manage the ML pipeline and data versioning. You can run the pipeline using DVC commands:
+
+```bash
+# Run the entire pipeline
+dvc repro
+
+# Run a specific stage
+dvc repro data_ingestion
+dvc repro prepare_base_model
+dvc repro training
+dvc repro evaluation
+
+# Check pipeline status
+dvc dag
+
+# Track changes in data or parameters
+dvc status
+```
 
 ### Running Individual Stages
 
@@ -157,6 +187,35 @@ The project integrates with MLflow for comprehensive experiment tracking:
 ### Viewing Experiments
 
 Access your experiments at: https://dagshub.com/bhaveshsisodia2/kidney_disease_classification.mlflow
+
+## DVC Integration
+
+The project uses DVC (Data Version Control) for managing the ML pipeline, data versioning, and experiment reproducibility:
+
+- **Pipeline Management**: DVC orchestrates the ML pipeline stages defined in `dvc.yaml`
+- **Data Versioning**: Tracks changes in datasets and models as Git-tracked metafiles
+- **Reproducibility**: Ensures experiments can be reproduced with the same data and parameters
+- **Storage**: Integrates with remote storage for large datasets and models
+
+### DVC Pipeline Stages
+
+1. **Data Ingestion**: Downloads and extracts kidney CT scan data
+2. **Prepare Base Model**: Sets up VGG16 base model with custom layers
+3. **Training**: Trains the model with data augmentation and hyperparameter tuning
+4. **Evaluation**: Evaluates model performance and logs metrics to MLflow
+
+### Managing Data with DVC
+
+```bash
+# Add data to DVC tracking
+dvc add artifacts/data_ingestion/kidney-ct-scan-image
+
+# Push data to remote storage
+dvc push
+
+# Pull data from remote storage
+dvc pull
+```
 
 ## Model Architecture
 
