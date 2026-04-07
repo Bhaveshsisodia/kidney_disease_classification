@@ -24,7 +24,10 @@ This project implements an end-to-end machine learning pipeline for classifying 
 - **Configuration Management**: Python Box, PyYAML
 - **Data Processing**: NumPy, Pandas
 - **Visualization**: Matplotlib, Seaborn
-- **Web Framework**: Flask (for potential API deployment)
+- **Web Framework**: Flask (for API deployment)
+- **Containerization**: Docker
+- **CI/CD**: GitHub Actions
+- **Cloud Platform**: AWS (ECR, ECS)
 - **Package Management**: pip, setuptools
 
 ## Installation
@@ -216,6 +219,68 @@ dvc push
 # Pull data from remote storage
 dvc pull
 ```
+
+## CI/CD Pipeline
+
+The project uses GitHub Actions for continuous integration and continuous deployment (CI/CD). The pipeline automates testing, building, and deployment processes.
+
+### CI/CD Workflow Features
+
+- **Continuous Integration**: Automated linting and unit testing on code pushes
+- **Continuous Delivery**: Builds Docker images and pushes to Amazon ECR
+- **Continuous Deployment**: Deploys the application to AWS infrastructure
+
+### Workflow Triggers
+
+The CI/CD pipeline runs automatically on:
+- Push to the `main` branch (excluding README.md changes)
+- Pull requests to the `main` branch
+
+### Pipeline Stages
+
+1. **Integration**: Code linting and unit test execution
+2. **Build & Push**: Docker image creation and ECR upload
+3. **Deployment**: Application deployment to AWS infrastructure
+
+## AWS Deployment
+
+The application is deployed on AWS using containerized architecture with the following services:
+
+### AWS Services Used
+
+- **Amazon ECR (Elastic Container Registry)**: Stores Docker images
+- **Amazon ECS (Elastic Container Service)**: Orchestrates container deployment
+- **AWS IAM**: Manages access permissions and credentials
+- **AWS Secrets Manager**: Securely stores sensitive configuration
+
+### Deployment Architecture
+
+- **Containerization**: Application runs in Docker containers
+- **Automated Deployment**: GitHub Actions handles the deployment process
+- **Environment Variables**: AWS credentials and configuration passed securely
+- **Port Configuration**: Application serves on port 8080
+
+### Manual Deployment (Alternative)
+
+If needed, you can deploy manually:
+
+```bash
+# Build Docker image
+docker build -t kidney-disease-classifier .
+
+# Run locally for testing
+docker run -p 8080:8080 kidney-disease-classifier
+
+# For AWS deployment, push to ECR and update ECS service
+```
+
+### Environment Setup for AWS
+
+Ensure the following AWS resources are configured:
+- ECR repository for storing images
+- ECS cluster and service for running containers
+- IAM roles with appropriate permissions
+- GitHub secrets for AWS credentials
 
 ## Model Architecture
 
