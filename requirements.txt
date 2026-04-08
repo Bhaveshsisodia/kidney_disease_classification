@@ -17,3 +17,8 @@ Flask
 Flask-Cors
 gdown # reading google drive files
 -e . # for installing the package in editable mode, allowing for easy development and testing
+flask
+flask-cors
+numpy
+pillow
+gunicorn
