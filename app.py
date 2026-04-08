@@ -1,6 +1,3 @@
-
-
-
 import os
 from flask import Flask, request, jsonify, render_template
 from flask_cors import CORS, cross_origin
@@ -8,13 +5,14 @@ from flask_cors import CORS, cross_origin
 from kidney_disease_classifier.pipeline.prediction import PredictionPipeline
 from kidney_disease_classifier.utils.common import decodeImage
 
+# Environment settings
 os.putenv("LANG", "en_US.UTF-8")
 os.putenv("LC_ALL", "en_US.UTF-8")
 
 app = Flask(__name__)
 CORS(app)
 
-# ✅ GLOBAL VARIABLE
+# ✅ GLOBAL MODEL HOLDER
 clApp = None
 
 # ✅ CLIENT CLASS
@@ -23,13 +21,13 @@ class ClientApp:
         self.filename = "inputImage.jpg"
         self.classifier = PredictionPipeline(self.filename)
 
-# ✅ LAZY LOADING FUNCTION
+# ✅ LAZY LOADING FUNCTION (IMPORTANT)
 def get_model():
     global clApp
     if clApp is None:
         print("Loading model...")
         clApp = ClientApp()
-        print("Model loaded")
+        print("Model loaded successfully")
     return clApp
 
 # ✅ HOME ROUTE
@@ -42,25 +40,25 @@ def home():
 @app.route("/predict", methods=["POST"])
 @cross_origin()
 def predictRoute():
-    model = get_model()   # 👈 FIX
+    try:
+        model = get_model()  # ✅ FIX
 
-    image = request.json["image"]
-    decodeImage(image, model.filename)
+        image = request.json["image"]
+        decodeImage(image, model.filename)
 
-    result = model.classifier.predict()
-    return jsonify(result)
+        result = model.classifier.predict()
+        return jsonify(result)
 
-@app.route("/train", methods=["GET","POST"])
-@cross_origin()
-def trainRoute():
-    os.system("python main.py")
-    # os.system("dvc repro")
-    return "Training done successfully!"
+    except Exception as e:
+        print("Error:", str(e))
+        return jsonify({"error": str(e)})
 
+# ✅ HEALTH CHECK (VERY IMPORTANT FOR AZURE)
+@app.route("/health", methods=["GET"])
+def health():
+    return "OK", 200
 
-
-# ✅ MAIN (only for local)
+# ✅ MAIN (only for local run)
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
-
